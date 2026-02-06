@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Mi Amor</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle, #1a0a1a, #000000);
+            font-family: 'Georgia', serif;
+            overflow: hidden;
+            color: white;
+            touch-action: manipulation;
+        }
+
+        /* Lluvia de Corazones */
+        .corazon-caida {
+            position: fixed;
+            top: -10%;
+            color: rgba(255, 45, 85, 0.4);
+            font-size: 22px;
+            pointer-events: none;
+            z-index: 1;
+            animation: caida linear forwards;
+        }
+
+        @keyframes caida {
+            to { transform: translateY(110vh) rotate(180deg); }
+        }
+
+        /* Sistema Giratorio */
+        .orbita-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            animation: girar-orbita 60s linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes girar-orbita {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .mensaje-central {
+            position: absolute;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-shadow: 0 0 15px #ff4d6d, 0 0 30px #ff4d6d;
+            z-index: 15;
+            animation: girar-contrario 60s linear infinite;
+        }
+
+        .punta {
+            position: absolute;
+            width: 85px; 
+            height: 85px;
+            border-radius: 50%;
+            border: 2px solid #ff4d6d;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 0 25px rgba(255, 77, 109, 0.5);
+            animation: girar-contrario 60s linear infinite;
+        }
+
+        @keyframes girar-contrario {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        .punta img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Posiciones */
+        .f1 { top: -42px; left: calc(50% - 42px); }
+        .f2 { top: 60px; left: 235px; }
+        .f3 { top: 225px; left: 175px; }
+        .f4 { top: 225px; left: 30px; }
+        .f5 { top: 60px; left: -25px; }
+
+        /* Overlay Mensaje */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .carta {
+            background: #fff;
+            color: #333;
+            width: 85%;
+            max-width: 320px;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            box-shadow: 0 0 40px #ff4d6d;
+        }
+
+        .cerrar-btn {
+            margin-top: 25px;
+            display: inline-block;
+            color: #ff4d6d;
+            font-weight: bold;
+            cursor: pointer;
+            border: 1px solid #ff4d6d;
+            padding: 8px 20px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body onclick="iniciarMusica()">
+
+    <audio id="miMusica" loop>
+        <source src="aaa.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="orbita-container">
+        <div class="mensaje-central">❤️<br>Nuestro<br>Tiempo</div>
+        
+        <div class="punta f1" onclick="abrirCarta(0)"><img src="foto1.jpg"></div>
+        <div class="punta f2" onclick="abrirCarta(1)"><img src="foto2.jpg"></div>
+        <div class="punta f3" onclick="abrirCarta(2)"><img src="foto3.jpg"></div>
+        <div class="punta f4" onclick="abrirCarta(3)"><img src="foto4.jpg"></div>
+        <div class="punta f5" onclick="abrirCarta(4)"><img src="foto5.jpg"></div>
+    </div>
+
+    <div id="pantalla-mensaje" class="overlay">
+        <div class="carta">
+            <p id="texto-mensaje"></p>
+            <div class="cerrar-btn" onclick="cerrarCarta()">Volver a nosotros</div>
+        </div>
+    </div>
+
+    <script>
+        const musica = document.getElementById('miMusica');
+        let musicaIniciada = false;
+
+        // Configuración de tiempo (segundos)
+        const startSec = 59;
+        const endSec = 90;
+
+        function iniciarMusica() {
+            if (!musicaIniciada) {
+                musica.currentTime = startSec;
+                musica.play();
+                musicaIniciada = true;
+            }
+        }
+
+        // Control del bucle personalizado (59s a 90s)
+        musica.addEventListener('timeupdate', function() {
+            if (this.currentTime >= endSec) {
+                this.currentTime = startSec;
+                this.play();
+            }
+        });
+
+        const cartasAmor = [
+            "Desde que llegaste, mi vida🧬 se llenó de colores 🌈 que no conocía. Eres mi refugio, mi paz y mi aventura 🌹favorita. Cada segundo a tu lado es un regalo eterno ♾️ que guardo en mi alma 🤍. Te amo más de lo que imaginas. 💖✨",
+              "Eres el sueño😴 del que nunca quiero despertar🥺. Tu sonrisa es mi motor💘 diario y tus ojos el mapa💌 que guía mi felicidad. No existe rincón en el mundo 🌍 donde no quiera estar contigo ✨mi peluchito 🧸. Eres mi todo💖 hoy y siempre ♾️. ",
+            "Amarte es la decisión más fácil y hermosa que he tomado. Gracias por ser mi apoyo incondicional y por llenar mis días de risas sinceras. Mi corazón late fuerte solo por ti, mi amor eterno. 💝🌹🦋🌈🤞🍭💏💞🍀✨",
+            "Contigo aprendí que el amor verdadero no tiene límites. Eres la melodía más dulce de mi vida y el sol que ilumina mis mañanas. Gracias por existir y por elegirme cada día. Te adoro inmensamente. 🌙⭐️💎💖🫂🌹💋✨🔥💫",
+            "Eres mi hogar, mi paz 🕊️ y mi mayor tesoro 🪙. No importa el tiempo ⏱️ni la distancia, mi corazón❤️siempre ♾️ encontrará el camino de regreso a ti. Eres mi principio y mi fin. Te amo con locura. 💘"
+        ];
+
+        function abrirCarta(num) {
+            iniciarMusica(); // Por si acaso no ha tocado la pantalla antes
+            document.getElementById('texto-mensaje').innerText = cartasAmor[num];
+            document.getElementById('pantalla-mensaje').style.display = 'flex';
+        }
+
+        function cerrarCarta() {
+            document.getElementById('pantalla-mensaje').style.display = 'none';
+        }
+
+        function lluviaCorazones() {
+            if (document.querySelectorAll('.corazon-caida').length > 12) return;
+            const c = document.createElement('div');
+            c.className = 'corazon-caida';
+            c.innerHTML = '❤️';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.animationDuration = Math.random() * 5 + 7 + 's';
+            c.style.opacity = Math.random() * 0.4 + 0.1;
+            document.body.appendChild(c);
+            setTimeout(() => c.remove(), 12000);
+        }
+
+        setInterval(lluviaCorazones, 1500);
+    </script>
+</body>
+</html>
